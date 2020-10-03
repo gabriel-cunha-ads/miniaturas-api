@@ -5,6 +5,9 @@ import java.util.Collections;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -16,9 +19,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
+@EnableWebMvc
 @ConfigurationProperties(prefix="app")
 public class SwaggerConfig {
-	
+
 	private String name;
 	
 	private String version;
@@ -26,12 +30,14 @@ public class SwaggerConfig {
 	private String description;
 	
 	private String organization;
+	
+	private String contextPath;
 
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("br.com.fujioka"))
+				.apis(RequestHandlerSelectors.basePackage("br.com.gabrielcunha"))
 				.paths(PathSelectors.any())
 				.build()
 				.apiInfo(apiInfo())
@@ -45,13 +51,25 @@ public class SwaggerConfig {
 				description, 
 				version, 
 				organization,
-				new Contact("Desenvolvimento", "", "fujiokades@fujioka.com.br"), 
+				new Contact("Desenvolvimento", "", "gabrielcunhadev@gmail.com"), 
 				"", 
 				"", 
 				Collections.emptyList());			
-		
-
 	}
+	
+    @Bean
+    public WebMvcConfigurer webMvcConfigurer()
+    {
+        return new WebMvcConfigurer()
+        {
+            @Override
+            public void addResourceHandlers( ResourceHandlerRegistry registry )
+            {
+                registry.addResourceHandler( "swagger-ui.html" ).addResourceLocations( "classpath:/META-INF/resources/" );
+                registry.addResourceHandler( "/webjars/**" ).addResourceLocations( "classpath:/META-INF/resources/webjars/" );
+            }
+        };
+    }	
 
 	public String getName() {
 		return name;
@@ -84,11 +102,19 @@ public class SwaggerConfig {
 	public void setOrganization(String organization) {
 		this.organization = organization;
 	}
+	
+	public String getContextPath() {
+		return contextPath;
+	}
+
+	public void setContextPath(String contextPath) {
+		this.contextPath = contextPath;
+	}
 
 	@Override
 	public String toString() {
 		return "SwaggerConfig [name=" + name + ", version=" + version + ", description=" + description
-				+ ", organization=" + organization + "]";
+				+ ", organization=" + organization + ", contextPath=" + contextPath + "]";
 	}
 	
 }

@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "fabricantes")
+@Table(name = "fabricante")
 public class Fabricante {
 
 	@Id
