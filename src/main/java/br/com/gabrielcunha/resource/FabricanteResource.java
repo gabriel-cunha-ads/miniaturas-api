@@ -90,7 +90,10 @@ public class FabricanteResource {
 		}
 	}
 	
-	@ApiOperation(value="Endpoint responsável por buscar um recurso fabricante por nome.")		
+	@ApiOperation(value="Endpoint responsável por buscar um recurso fabricante por nome.")	
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Sucesso."),
+            @ApiResponse(code = 404, message = "Recurso não encontrado.")})	
 	@GetMapping("/nome/{nome}")
 	public Fabricante buscarPorNome(@PathVariable String nome) {
 		return fabricantesDao.findByNome(nome);
