@@ -25,6 +25,7 @@ import br.com.gabrielcunha.entity.Fabricante;
 import br.com.gabrielcunha.repository.FabricantesRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -42,6 +43,7 @@ public class FabricanteResource {
 	public List<Fabricante> listarTodos () throws Exception{
 		return fabricantesDao.findAll();
 	}
+	
 	
 	@ApiOperation(value="Endpoint responsável por criar um recurso.")	
 	@ApiResponses(value = { 
@@ -66,7 +68,12 @@ public class FabricanteResource {
 		 return ResponseEntity.created(uri).body(fabricanteSalvo);
 	}
 	
+	
 	@ApiOperation(value="Endpoint responsável por buscar um recurso por codigo.")	
+    @ApiParam(name = "id",
+			  value = "Id do recurso para busca. Não pode ser vazio..",
+			  example = "1",
+			  required = true)	
 	@ApiResponses(value = {
 	        @ApiResponse(code = 200, message = "Sucesso.", response = Fabricante.class),
 	        @ApiResponse(code = 404, message = "Recurso não encontrado.") 
@@ -90,6 +97,7 @@ public class FabricanteResource {
 		}
 	}
 	
+	
 	@ApiOperation(value="Endpoint responsável por buscar um recurso fabricante por nome.")	
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Sucesso."),
@@ -98,6 +106,7 @@ public class FabricanteResource {
 	public Fabricante buscarPorNome(@PathVariable String nome) {
 		return fabricantesDao.findByNome(nome);
 	}
+	
 	
 	@ApiOperation(value="Endpoint responsável por remover um recurso pelo id.")		
     @ApiResponses(value = { 
@@ -108,6 +117,7 @@ public class FabricanteResource {
 	public void remover (@PathVariable Long id) {
 		fabricantesDao.deleteById(id);
 	}
+	
 	
 	@ApiOperation(value="Endpoint responsável por atualizar um recurso pelo id, enviando no body da requisição o json do recurso com os dados atualizados.")	
     @ApiResponses(value = {
