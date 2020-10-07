@@ -24,4 +24,6 @@ public class Fabricante {
 	@Column(name = "fab_nome")
 	private String nome;
 	
+	
+	
 }
